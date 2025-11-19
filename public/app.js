@@ -222,7 +222,7 @@ function prefillFromSharedStateForCard(card) {
 }
 
 // =====================
-// 3) CHECK RIMAS + DUPLICADOS
+// 3) CHECK RIMAS + DUPLICADOS GLOBALES
 // =====================
 function getWordSuffixes(word) {
   if (!word) return null;
@@ -236,6 +236,7 @@ function getWordSuffixes(word) {
 function checkSonnet(card) {
   const inputs = Array.from(card.querySelectorAll(".blank-input"));
 
+  // Limpiar clases previas
   inputs.forEach((input) =>
     input.classList.remove("correct", "wrong", "duplicate")
   );
@@ -245,8 +246,8 @@ function checkSonnet(card) {
 
   const groupSuffixes = {};
   const groupHasError = {};
-  const wordMap = {};
 
+  // ===== 1) CHECK DE RIMAS DENTRO DEL GRUPO =====
   inputs.forEach((input) => {
     const group = input.dataset.rhymeGroup;
     const value = input.value.trim();
@@ -271,12 +272,6 @@ function checkSonnet(card) {
     }
 
     groupSuffixes[group].push(suffixes);
-
-    const norm = value.toLowerCase().replace(/[^a-z]/g, "");
-    if (norm) {
-      if (!wordMap[norm]) wordMap[norm] = [];
-      wordMap[norm].push(input);
-    }
   });
 
   const groupIsCorrect = {};
@@ -306,19 +301,39 @@ function checkSonnet(card) {
     if (!ok) allCorrect = false;
   });
 
+  // ===== 2) DUPLICADOS GLOBALES (TODOS LOS GRUPOS) =====
+  const allInputs = Array.from(document.querySelectorAll(".blank-input"));
+  const globalWordMap = {};
+
+  allInputs.forEach((inputEl) => {
+    const norm = inputEl.value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z]/g, "");
+
+    if (!norm) return;
+    if (!globalWordMap[norm]) globalWordMap[norm] = [];
+    globalWordMap[norm].push(inputEl);
+  });
+
   const duplicateWords = new Set();
-  Object.keys(wordMap).forEach((norm) => {
-    if (wordMap[norm].length > 1) {
+  Object.keys(globalWordMap).forEach((norm) => {
+    if (globalWordMap[norm].length > 1) {
       duplicateWords.add(norm);
     }
   });
+
   if (duplicateWords.size > 0) {
     allCorrect = false;
   }
 
+  // ===== 3) MARCAR INPUTS =====
   inputs.forEach((input) => {
     const group = input.dataset.rhymeGroup;
-    const valueNorm = input.value.trim().toLowerCase().replace(/[^a-z]/g, "");
+    const valueNorm = input.value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z]/g, "");
 
     if (groupIsCorrect[group]) {
       input.classList.add("correct");
@@ -331,6 +346,7 @@ function checkSonnet(card) {
     }
   });
 
+  // ===== 4) STATUS Y RANK =====
   const status = card.querySelector(".status");
   const groupId = card.dataset.player;
 
@@ -339,7 +355,7 @@ function checkSonnet(card) {
     status.className = "status bad";
   } else if (allCorrect) {
     status.textContent =
-      "Perfect rhyme scheme! Now check the syllables like a real Shakespearean poet.";
+      "Perfect rhyme scheme! No repeated words across groups!";
     status.className = "status good";
 
     if (!card.dataset.rank) {
@@ -348,10 +364,10 @@ function checkSonnet(card) {
   } else {
     if (duplicateWords.size > 0) {
       status.textContent =
-        "Rhyme groups are not matching, or some words are repeated. Use different endings.";
+        "One or more words are repeated across groups. Each word may be used only once in the entire arena.";
     } else {
       status.textContent =
-        "Rhyme groups are not matching yet. Adjust the endings (ABAB CDCD EFEF GG).";
+        "Rhyme groups do not match yet. Adjust the endings (ABAB CDCD EFEF GG).";
     }
     status.className = "status bad";
   }
