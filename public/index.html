@@ -12,13 +12,12 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- 🔄 NEW GAME BUTTON (arriba de todo) -->
-  <div class="top-reset-bar">
-    <button id="btn-reset" class="btn-reset">🔄 NEW GAME</button>
-  </div>
-
   <div class="wrapper">
+    <!-- 🔁 TOP BAR con NEW GAME -->
+    <div class="top-reset-bar">
+      <button id="btn-reset-game" class="btn-reset">🔁 NEW GAME</button>
+    </div>
+
     <header>
       <h1>Shakespearean Sonnet Arena</h1>
       <div id="global-timer" class="global-timer">10:00</div>
@@ -143,7 +142,7 @@
     </section>
   </div>
 
-  <!-- Socket.io -->
+  <!-- Socket.io (servidor) -->
   <script src="/socket.io/socket.io.js"></script>
   <!-- JS externo -->
   <script src="app.js"></script>

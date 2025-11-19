@@ -15,9 +15,10 @@ const NUM_GROUPS = 4;
 const INITIAL_TIME = 600; // 10 minutos
 
 // ====== ESTADO GLOBAL ======
-let globalState = createInitialState();
+let globalState;
+let timerInterval = null;
 
-function createInitialState() {
+function buildInitialState() {
   const state = {
     timer: {
       started: false,
@@ -34,14 +35,22 @@ function createInitialState() {
       topic: null,
       started: false,
       rank: null,
-      words: {},
+      words: {}, // { lineIndex: "word" }
     };
   }
 
   return state;
 }
 
-let timerInterval = null;
+function resetGlobalState() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  globalState = buildInitialState();
+}
+
+resetGlobalState(); // iniciamos por primera vez
 
 // ====== TIMER EN EL SERVIDOR ======
 function startTimerIfNeeded() {
@@ -54,7 +63,6 @@ function startTimerIfNeeded() {
 
   timerInterval = setInterval(() => {
     globalState.timer.remainingSeconds -= 1;
-
     if (globalState.timer.remainingSeconds < 0) {
       globalState.timer.remainingSeconds = 0;
     }
@@ -105,27 +113,28 @@ io.on("connection", (socket) => {
         globalState.usedTopics.push(topic);
       }
 
+      // Avisar a TODOS
       io.emit("groupStarted", { groupId, topic });
     }
 
+    // Arrancar timer global si todavía no
     startTimerIfNeeded();
   });
 
-  // Cambio de nombre
+  // Cambio de nombre de grupo
   socket.on("renameGroup", ({ groupId, name }) => {
     const group = globalState.groups[groupId];
     if (!group) return;
-
     const cleanName = (name || "").trim() || `Group ${groupId}`;
     group.name = cleanName;
     io.emit("groupRenamed", { groupId, name: cleanName });
   });
 
-  // Pedido de rank
+  // Pedido de rank (cuando un soneto es perfecto)
   socket.on("requestRank", ({ groupId }) => {
     const group = globalState.groups[groupId];
     if (!group) return;
-    if (group.rank) return;
+    if (group.rank) return; // ya tiene puesto
 
     const rank = globalState.nextRank;
     if (rank > NUM_GROUPS) return;
@@ -136,20 +145,10 @@ io.on("connection", (socket) => {
     io.emit("rankAssigned", { groupId, rank });
   });
 
-  // ====== NEW GAME — REINICIAR TODO ======
-  socket.on("resetGame", () => {
-    console.log("🔄 NEW GAME solicitado. Reiniciando...");
-
-    // Resetear timer
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
-
-    // Crear nuevo estado
-    globalState = createInitialState();
-
-    // Avisar a TODOS que todo volvió al inicio
+  // ====== NUEVO JUEGO (RESET GLOBAL) ======
+  socket.on("resetGameRequest", () => {
+    console.log("Reset de juego solicitado");
+    resetGlobalState();
     io.emit("gameReset", globalState);
   });
 });

@@ -119,18 +119,6 @@ h1 {
   margin-top: 10px;
 }
 
-@media (max-width: 1200px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* PLAYER CARD */
 .player-card {
   position: relative;
@@ -332,4 +320,116 @@ button.primary {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #facc6b;
+}
+
+/* =========================
+   MEDIA QUERIES RESPONSIVE
+   ========================= */
+
+/* Pantallas medianas (notebooks / tablets) */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+
+  body {
+    align-items: stretch;
+    padding: 12px;
+  }
+
+  .wrapper {
+    max-width: 100%;
+  }
+
+  .player-card {
+    min-height: 520px;
+  }
+}
+
+/* Tablets y celus en horizontal / vertical grande */
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    letter-spacing: 0.14em;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls > * {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .sonnet {
+    min-height: 260px;
+    max-height: 340px;
+    overflow-y: auto; /* scroll si no entran las 14 líneas */
+  }
+
+  .player-card {
+    padding: 20px 16px;
+  }
+}
+
+/* Celulares chicos */
+@media (max-width: 600px) {
+  body::before,
+  body::after {
+    display: none; /* sacamos marcos para ganar espacio */
+  }
+
+  body {
+    padding: 8px 4px;
+  }
+
+  .wrapper {
+    max-width: 100%;
+  }
+
+  .grid {
+    gap: 12px;
+  }
+
+  .player-card {
+    margin-top: 10px;
+    padding: 16px 12px;
+    border-radius: 16px;
+    min-height: auto;
+  }
+
+  .badge-rank {
+    top: -14px;
+    font-size: 0.7rem;
+    padding: 4px 16px;
+  }
+
+  .global-timer {
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+  }
+
+  .player-name {
+    font-size: 0.95rem;
+  }
+
+  .blank-input {
+    width: 70px;
+    font-size: 0.8rem;
+  }
 }

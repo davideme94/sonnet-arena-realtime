@@ -141,7 +141,6 @@ const TOPIC_TEMPLATES = {
 };
 
 const rankLabels = ["FIRST PLACE", "SECOND PLACE", "THIRD PLACE", "FOURTH PLACE"];
-
 let firstWinner = null; // primer grupo que completa perfecto (rank 1 asignado)
 
 // =====================
@@ -176,7 +175,7 @@ function createSonnetLines(container, topic) {
     input.type = "text";
     input.className = "blank-input";
     input.setAttribute("data-rhyme-group", tpl.rhymeGroup);
-    input.setAttribute("data-line-index", idx); // 👈 índice de línea para el socket
+    input.setAttribute("data-line-index", idx);
     input.setAttribute("placeholder", "word");
 
     text.appendChild(prefixSpan);
@@ -343,7 +342,6 @@ function checkSonnet(card) {
       "Perfect rhyme scheme! Now check the syllables like a real Shakespearean poet.";
     status.className = "status good";
 
-    // Pedir puesto al servidor (si aún no tiene)
     if (!card.dataset.rank) {
       socket.emit("requestRank", { groupId });
     }
@@ -669,7 +667,7 @@ function applyInitStateIfReady() {
 }
 
 // =====================
-// 7) APLICAR RANK A UNA CARD (lo usamos para eventos y para init)
+// 7) APLICAR RANK A UNA CARD
 // =====================
 function applyRankToCard(card, rank) {
   card.dataset.rank = String(rank);
@@ -717,7 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Start a NEW GAME? This will erase all groups’ work and reset the timer."
       );
       if (!sure) return;
-      socket.emit("resetGame");
+      socket.emit("resetGameRequest"); // 👈 CORREGIDO
     });
   }
 
