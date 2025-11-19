@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shakespearean Sonnet Arena</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fuente barroca para título / badges -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 🔄 NEW GAME BUTTON (arriba de todo) -->
+  <div class="top-reset-bar">
+    <button id="btn-reset" class="btn-reset">🔄 NEW GAME</button>
+  </div>
+
+  <div class="wrapper">
+    <header>
+      <h1>Shakespearean Sonnet Arena</h1>
+      <div id="global-timer" class="global-timer">10:00</div>
+      <p class="subtitle">
+        4 groups, 14 lines, ~10 syllables,
+        <span>ABAB CDCD EFEF GG</span>. Fill the last words so the rhymes match.
+      </p>
+    </header>
+
+    <section class="grid">
+      <!-- PLAYER 1 -->
+      <article class="player-card" data-player="1">
+        <div class="badge-rank"></div>
+        <div class="player-header">
+          <div class="player-name" contenteditable="true">Group 1</div>
+        </div>
+
+        <div class="controls">
+          <span class="topic-label">topic</span>
+          <select class="topic-select">
+            <option value="" selected disabled>Select topic</option>
+            <option value="love">Love</option>
+            <option value="war">War</option>
+            <option value="time">Time</option>
+            <option value="power">Power</option>
+            <option value="death">Death</option>
+            <option value="betrayal">Betrayal</option>
+          </select>
+
+          <button class="primary btn-start">Start</button>
+          <button class="btn-check">Check</button>
+          <button class="btn-pdf">Download as PDF</button>
+        </div>
+
+        <div class="sonnet" data-lines></div>
+        <div class="status">Press START to generate your sonnet board.</div>
+      </article>
+
+      <!-- PLAYER 2 -->
+      <article class="player-card" data-player="2">
+        <div class="badge-rank"></div>
+        <div class="player-header">
+          <div class="player-name" contenteditable="true">Group 2</div>
+        </div>
+
+        <div class="controls">
+          <span class="topic-label">topic</span>
+          <select class="topic-select">
+            <option value="" selected disabled>Select topic</option>
+            <option value="love">Love</option>
+            <option value="war">War</option>
+            <option value="time">Time</option>
+            <option value="power">Power</option>
+            <option value="death">Death</option>
+            <option value="betrayal">Betrayal</option>
+          </select>
+
+          <button class="primary btn-start">Start</button>
+          <button class="btn-check">Check</button>
+          <button class="btn-pdf">Download as PDF</button>
+        </div>
+
+        <div class="sonnet" data-lines></div>
+        <div class="status">Press START to generate your sonnet board.</div>
+      </article>
+
+      <!-- PLAYER 3 -->
+      <article class="player-card" data-player="3">
+        <div class="badge-rank"></div>
+        <div class="player-header">
+          <div class="player-name" contenteditable="true">Group 3</div>
+        </div>
+
+        <div class="controls">
+          <span class="topic-label">topic</span>
+          <select class="topic-select">
+            <option value="" selected disabled>Select topic</option>
+            <option value="love">Love</option>
+            <option value="war">War</option>
+            <option value="time">Time</option>
+            <option value="power">Power</option>
+            <option value="death">Death</option>
+            <option value="betrayal">Betrayal</option>
+          </select>
+
+          <button class="primary btn-start">Start</button>
+          <button class="btn-check">Check</button>
+          <button class="btn-pdf">Download as PDF</button>
+        </div>
+
+        <div class="sonnet" data-lines></div>
+        <div class="status">Press START to generate your sonnet board.</div>
+      </article>
+
+      <!-- PLAYER 4 -->
+      <article class="player-card" data-player="4">
+        <div class="badge-rank"></div>
+        <div class="player-header">
+          <div class="player-name" contenteditable="true">Group 4</div>
+        </div>
+
+        <div class="controls">
+          <span class="topic-label">topic</span>
+          <select class="topic-select">
+            <option value="" selected disabled>Select topic</option>
+            <option value="love">Love</option>
+            <option value="war">War</option>
+            <option value="time">Time</option>
+            <option value="power">Power</option>
+            <option value="death">Death</option>
+            <option value="betrayal">Betrayal</option>
+          </select>
+
+          <button class="primary btn-start">Start</button>
+          <button class="btn-check">Check</button>
+          <button class="btn-pdf">Download as PDF</button>
+        </div>
+
+        <div class="sonnet" data-lines></div>
+        <div class="status">Press START to generate your sonnet board.</div>
+      </article>
+    </section>
+  </div>
+
+  <!-- Socket.io -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- JS externo -->
+  <script src="app.js"></script>
+</body>
+</html>
